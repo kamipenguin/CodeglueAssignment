@@ -174,7 +174,7 @@ MonoBehaviour:
   _wayPoints:
   - {fileID: 0}
   - {fileID: 0}
-  _moveSpeed: 0.02
+  _moveSpeed: 0.01
   _waitTime: 1
   _goalReachedDistance: 0.3
 --- !u!1001 &1665384195432022639
