@@ -746,6 +746,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: obb
       objectReference: {fileID: 0}
+    - target: {fileID: 1476538885005212589, guid: ca7215c0154267f4882e523c8fce60e8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1476538885005567949, guid: ca7215c0154267f4882e523c8fce60e8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -944,5 +949,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8207729934206652648, guid: dda05789a4ba60f46abe20d906ce27ab,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 309d6c31d25a7a34aab4c66f5356fc9f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dda05789a4ba60f46abe20d906ce27ab, type: 3}

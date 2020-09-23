@@ -64,7 +64,7 @@ public class MovementController : MonoBehaviour
         CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
         _rigidBody.velocity = new Vector2(horizontal * CurrentSpeed, _rigidBody.velocity.y);
 
-        //SetWalkingAnimation();
+        SetWalkingAnimation();
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class MovementController : MonoBehaviour
             _rigidBody.velocity = new Vector2(lastHorizontal * CurrentSpeed, _rigidBody.velocity.y);
         }
 
-        //SetIdleAnimation();
+        SetIdleAnimation();
     }
 
     /// <summary>
@@ -106,14 +106,14 @@ public class MovementController : MonoBehaviour
         {
             if (_rigidBody.velocity.x > 0)
             {
-                _animator.SetBool("IsJumping", false);
+                //_animator.SetBool("IsJumping", false);
                 _animator.SetBool("IsIdling", false);
                 _animator.SetBool("IsWalking", true);
                 //_spriteRenderer.flipX = false;
             }
             else
             {
-                _animator.SetBool("IsJumping", false);
+                //_animator.SetBool("IsJumping", false);
                 _animator.SetBool("IsIdling", false);
                 _animator.SetBool("IsWalking", true);
                 //_spriteRenderer.flipX = true;
