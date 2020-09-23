@@ -884,11 +884,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4010348570380803814, guid: dda05789a4ba60f46abe20d906ce27ab,
-        type: 3}
-      propertyPath: _maxFallingSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8207729934197269308, guid: dda05789a4ba60f46abe20d906ce27ab,
         type: 3}
       propertyPath: m_Name
@@ -949,10 +944,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8207729934206652648, guid: dda05789a4ba60f46abe20d906ce27ab,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 309d6c31d25a7a34aab4c66f5356fc9f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dda05789a4ba60f46abe20d906ce27ab, type: 3}

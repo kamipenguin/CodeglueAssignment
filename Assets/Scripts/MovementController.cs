@@ -3,7 +3,7 @@
 public class MovementController : MonoBehaviour
 {
     private Rigidbody _rigidBody;
-    private Animator _animator;
+    private AnimationController _animationController;
 
     [Header("Walk Settings")]
     [SerializeField]
@@ -39,15 +39,13 @@ public class MovementController : MonoBehaviour
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
+        _animationController = GetComponentInChildren<AnimationController>();
     }
 
     private void FixedUpdate()
     {
         if (IsGravityReversed)
-        {
             _rigidBody.AddForce(Vector3.up * _gravityForce);
-        }
     }
 
     /// <summary>
@@ -64,7 +62,8 @@ public class MovementController : MonoBehaviour
         CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
         _rigidBody.velocity = new Vector2(horizontal * CurrentSpeed, _rigidBody.velocity.y);
 
-        SetWalkingAnimation();
+        if (IsGrounded)
+            _animationController.SetWalkingAnimation();
     }
 
     /// <summary>
@@ -80,46 +79,10 @@ public class MovementController : MonoBehaviour
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
             _rigidBody.velocity = new Vector2(lastHorizontal * CurrentSpeed, _rigidBody.velocity.y);
         }
-
-        SetIdleAnimation();
+        else
+            _animationController.SetIdleAnimation();
     }
 
-    /// <summary>
-    /// Set the animation to the idle animation when the horizontal velocity is zero.
-    /// </summary>
-    private void SetIdleAnimation()
-    {
-        if (_rigidBody.velocity.x == 0)
-        {
-            _animator.SetBool("IsWalking", false);
-            _animator.SetBool("IsIdling", true);
-        }
-    }
-
-
-    /// <summary>
-    /// Set the animation to the walking animation when the horizontal velocity is not zero.
-    /// </summary>
-    private void SetWalkingAnimation()
-    {
-        if (IsGrounded)
-        {
-            if (_rigidBody.velocity.x > 0)
-            {
-                //_animator.SetBool("IsJumping", false);
-                _animator.SetBool("IsIdling", false);
-                _animator.SetBool("IsWalking", true);
-                //_spriteRenderer.flipX = false;
-            }
-            else
-            {
-                //_animator.SetBool("IsJumping", false);
-                _animator.SetBool("IsIdling", false);
-                _animator.SetBool("IsWalking", true);
-                //_spriteRenderer.flipX = true;
-            }
-        }
-    }
 
     /// <summary>
     /// Handles the jumping of the player.
@@ -137,7 +100,7 @@ public class MovementController : MonoBehaviour
             _currentJumpSpeed = _initialJumpForce;
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
 
-            //SetJumpingAnimation();
+            //_animationController.SetJumpingAnimation();
         }
         // if the player is still jumping, decelerate the upwards velocity to slow the jump.
         else if (IsJumping)
@@ -170,29 +133,11 @@ public class MovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the animation to the jumping animation.
-    /// </summary>
-    private void SetJumpingAnimation()
-    {
-        _animator.SetBool("IsIdling", false);
-        _animator.SetBool("IsWalking", false);
-        _animator.SetBool("IsJumping", true);
-    }
-
-    /// <summary>
     /// Checks if the player is on the ground or on a player.
     /// </summary>
     /// <returns></returns>
     private void CheckIsGrounded()
     {
-        if (_rigidBody.velocity.y == 0)
-        {
-                //_animator.SetBool("IsWalking", false);
-                //_animator.SetBool("IsJumping", false);
-                //_animator.SetBool("IsIdling", true);
-                IsGrounded = true;
-        }
-        else
-            IsGrounded = false;
+        IsGrounded = _rigidBody.velocity.y == 0;
     }
 }
