@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     private Vector3 _spawnPointPlayer2;
 
     private Quaternion _spawnRotationPlayer1;
-    private Quaternion _spawnRotatoinPlayer2;
+    private Quaternion _spawnRotationPlayer2;
 
     private float _waitTime = 0.5f;
 
@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
         _spawnPointPlayer2 = _player2.transform.position;
 
         _spawnRotationPlayer1 = _player1.transform.rotation;
-        _spawnRotatoinPlayer2 = _player2.transform.rotation;
+        _spawnRotationPlayer2 = _player2.transform.rotation;
 }
 
     /// <summary>
@@ -65,9 +65,6 @@ public class GameController : MonoBehaviour
     {
         RestorePlayers();
 
-        _player1.transform.position = _spawnPointPlayer1;
-        _player2.transform.position = _spawnPointPlayer2;
-
         _player1.SetActive(true);
         _player2.SetActive(true);
     }
@@ -86,6 +83,6 @@ public class GameController : MonoBehaviour
         _player2.transform.position = _spawnPointPlayer2;
 
         _player1.transform.rotation = _spawnRotationPlayer1;
-        _player2.transform.rotation = _spawnRotatoinPlayer2;
+        _player2.transform.rotation = _spawnRotationPlayer2;
     }
 }

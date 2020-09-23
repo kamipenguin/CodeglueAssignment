@@ -138,6 +138,7 @@ MonoBehaviour:
   _crawler: {fileID: 1665384195432056015}
   _freedSpiritPrefab: {fileID: 8896092123383804721, guid: 97c7b1e3c561446459727e295490d286,
     type: 3}
+  _shootSpiritForce: 7.5
 --- !u!1 &1665384196792529933
 GameObject:
   m_ObjectHideFlags: 0

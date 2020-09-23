@@ -26,16 +26,15 @@ public class WayPointAgent : MonoBehaviour
     /// </summary>
     private void MoveToDestination()
     {
-        if (!_hasReachedDestination)
-        {
-            Vector3 currentPosition = gameObject.transform.position;
-            Vector3 goalPosition = _wayPoints[_currentIndex].position;
-            gameObject.transform.position = Vector3.MoveTowards(currentPosition, goalPosition, _moveSpeed);
+        if (_hasReachedDestination)
+            return;
 
-            CheckDestinationReached(currentPosition, goalPosition);
-        }
+        Vector3 currentPosition = transform.position;
+        Vector3 goalPosition = _wayPoints[_currentIndex].position;
+        gameObject.transform.position = Vector3.MoveTowards(currentPosition, goalPosition, _moveSpeed);
+
+        CheckDestinationReached(currentPosition, goalPosition);
     }
-
 
     /// <summary>
     /// Checks if the enemy has reached their destination.
@@ -50,7 +49,6 @@ public class WayPointAgent : MonoBehaviour
             StartCoroutine(WaitAndTurn());
         }
     }
-
 
     /// <summary>
     /// Wait for a few seconds before turning around and sets new destination.

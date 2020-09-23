@@ -4,6 +4,8 @@ using UnityEngine;
 public class FreedSpirit : MonoBehaviour
 {
     private SphereCollider _sphereCollider;
+
+    [SerializeField]
     private float _waitTime = 0.15f;
 
     private void Awake()

@@ -25,6 +25,8 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private float _minJumpSpeed = 2f;
 
+    // harcoded values to achieve desired rotation as mirror on the y-axis doesn't work.
+    // I want that the players always face the camera.
     private float _rightRotationUp = 90f;
     private float _leftRotationUp = 130f;
     private float _rightRotationDown = 130f;
@@ -73,27 +75,25 @@ public class MovementController : MonoBehaviour
     private void LimitFallingSpeed()
     {
         float yVelocity = _rigidBody.velocity.y;
+
+        float limitedFallingSpeed;
         if (IsGravityReversed)
-        {
-            float limitedFallingSpeed = Mathf.Clamp(yVelocity, StoredMaxFallingSpeed, -StoredMaxFallingSpeed);
-            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, limitedFallingSpeed);
-        }
+            limitedFallingSpeed = Mathf.Clamp(yVelocity, StoredMaxFallingSpeed, -StoredMaxFallingSpeed);
         else
-        {
-            float limitedFallingSpeed = Mathf.Clamp(yVelocity, -StoredMaxFallingSpeed, StoredMaxFallingSpeed);
-            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, limitedFallingSpeed);
-        }
+            limitedFallingSpeed = Mathf.Clamp(yVelocity, -StoredMaxFallingSpeed, StoredMaxFallingSpeed);
+
+        _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, limitedFallingSpeed);
     }
 
     /// <summary>
     /// Handles the walking movement of the player.
     /// </summary>
-    /// <param name="horizontal"></param>
     public void Move(float horizontal)
     {
         // when player changes direction, set speed to 0.
         if ((_rigidBody.velocity.x > 0 && horizontal < 0) || (_rigidBody.velocity.x < 0 && horizontal > 0))
             _currentSpeed = 0;
+
         // accelerate the player's velocity to max speed.
         _currentSpeed += _moveAcceleration * Time.deltaTime;
         _currentSpeed = Mathf.Clamp(_currentSpeed, 0, _maxMoveSpeed);
@@ -114,30 +114,31 @@ public class MovementController : MonoBehaviour
         if (EnteredGravityPortal)
             return;
 
+        Vector3 rotation = _rigidBody.transform.eulerAngles;
+
         // player is walking right.
         if (_rigidBody.velocity.x > 0)
         {
-            Vector3 currentRotation = _rigidBody.transform.eulerAngles;
             if (IsGravityReversed)
-                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _rightRotationDown, currentRotation.z);
+                rotation.y = _rightRotationDown;
             else
-                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _rightRotationUp, currentRotation.z);
+                rotation.y = _rightRotationUp;
         }
         // player is walking left
         else if (_rigidBody.velocity.x < 0)
         {
-            Vector3 currentRotation = _rigidBody.transform.eulerAngles;
             if (IsGravityReversed)
-                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _leftRotationDown, currentRotation.z);
+                rotation.y = _leftRotationDown;
             else
-                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _leftRotationUp, currentRotation.z);
+                rotation.y = _leftRotationUp;
         }
+
+        _rigidBody.transform.eulerAngles = rotation;
     }
 
     /// <summary>
     /// Handles the stopping movement of the player.
     /// </summary>
-    /// <param name="lastHorizontal"></param>
     public void StopMoving(float lastHorizontal)
     {
         // decelerate the player's velocity to 0, so the player stops moving.
@@ -176,10 +177,11 @@ public class MovementController : MonoBehaviour
         // if the player is still jumping, decelerate the upwards velocity to slow the jump.
         else if (_isJumping)
         {
+            float deceleration = _jumpDeceleration * Time.deltaTime;
             if (IsGravityReversed)
-                _currentJumpSpeed += _jumpDeceleration * Time.deltaTime;
+                _currentJumpSpeed += deceleration;
             else
-                _currentJumpSpeed -= _jumpDeceleration * Time.deltaTime;
+                _currentJumpSpeed -= deceleration;
 
             _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, _currentJumpSpeed);
         }
@@ -199,12 +201,14 @@ public class MovementController : MonoBehaviour
             // if the player just started stopping the jump, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
             if (!_stoppedJumping)
             {
-                float maxVelocity;
                 _stoppedJumping = true;
+
+                float maxVelocity;
                 if (IsGravityReversed)
                     maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_minJumpSpeed, 0);
                 else
                     maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpSpeed);
+
                 _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, maxVelocity);
             }
         }
