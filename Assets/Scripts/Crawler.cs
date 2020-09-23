@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Crawler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GameController _gameController;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("Player"))
+            _gameController.DestroyPlayers();         
     }
 }

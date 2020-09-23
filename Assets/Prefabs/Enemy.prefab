@@ -26,6 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272dc1d243706a24c914552ebad9f37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameController: {fileID: 0}
 --- !u!1 &1665384196610355845
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _crawler: {fileID: 1665384195432056015}
+  _freedSpiritPrefab: {fileID: 8896092123383804721, guid: 97c7b1e3c561446459727e295490d286,
+    type: 3}
 --- !u!1 &1665384196792529933
 GameObject:
   m_ObjectHideFlags: 0

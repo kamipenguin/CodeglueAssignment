@@ -218,7 +218,7 @@ public class MovementController : MonoBehaviour
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Player"))
         {
             IsGrounded = true;
             EnteredGravityPortal = false;

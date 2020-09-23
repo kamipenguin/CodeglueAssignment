@@ -14,7 +14,7 @@ public class FreedSpirit : MonoBehaviour
 
     private void Start()
     {
-        Wait();
+        StartCoroutine(Wait());
     }
 
     private IEnumerator Wait()
