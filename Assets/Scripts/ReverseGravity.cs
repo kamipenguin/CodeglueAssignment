@@ -9,7 +9,7 @@ public class ReverseGravity : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        // turn the player upside down when he/she went through the gravity portal.
+        // turn the player upside down when they went through the gravity portal.
         if (other.gameObject.CompareTag("Player"))
         {
             MovementController playerMovementController = other.GetComponent<MovementController>();

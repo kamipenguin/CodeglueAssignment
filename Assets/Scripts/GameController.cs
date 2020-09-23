@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -50,6 +49,10 @@ public class GameController : MonoBehaviour
         StartCoroutine(Wait());
     }
 
+    /// <summary>
+    /// Wait a bit before respawning the players.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(_waitTime);
@@ -57,11 +60,11 @@ public class GameController : MonoBehaviour
     }
 
     /// <summary>
-    /// Respawns the players after being desroyed.
+    /// Respawns the players after being desroyed by an enemy.
     /// </summary>
     private void RespawnPlayers()
     {
-        RestorePlayer();
+        RestorePlayers();
 
         _player1.transform.position = _spawnPointPlayer1;
         _player2.transform.position = _spawnPointPlayer2;
@@ -71,9 +74,9 @@ public class GameController : MonoBehaviour
     }
 
     /// <summary>
-    /// Restores player to correct orientation.
+    /// Restores the players to the correct orientation.
     /// </summary>
-    private void RestorePlayer()
+    private void RestorePlayers()
     {
         _movementControllerPlayer1.IsGravityReversed = false;
         _movementControllerPlayer2.IsGravityReversed = false;

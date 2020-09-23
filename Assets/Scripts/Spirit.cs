@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Spirit : MonoBehaviour
 {   
@@ -22,6 +20,7 @@ public class Spirit : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            // spawn the freed spirit and shoot it upwards.
             GameObject freedSpirit = Instantiate(_freedSpiritPrefab, transform.position, Quaternion.identity);
             Rigidbody freedSpiritRigidbody = freedSpirit.GetComponent<Rigidbody>();
             freedSpiritRigidbody.AddForce(Vector3.up * _shootSpiritForce, ForceMode.Impulse);

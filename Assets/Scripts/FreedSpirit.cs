@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FreedSpirit : MonoBehaviour
@@ -17,6 +16,10 @@ public class FreedSpirit : MonoBehaviour
         StartCoroutine(Wait());
     }
 
+    /// <summary>
+    /// Wait a bit before setting the isTrigger to false so it won't be destroyed the moment the player defeated the enemy.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(_waitTime);

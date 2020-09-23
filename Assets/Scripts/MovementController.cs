@@ -23,7 +23,7 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private float _gravityForce = 9.81f;
     [SerializeField]
-    private float _maxFallingSpeed = 2f;
+    private float _minJumpSpeed = 2f;
 
     private float _rightRotationUp = 90f;
     private float _leftRotationUp = 130f;
@@ -33,7 +33,7 @@ public class MovementController : MonoBehaviour
     private float _currentSpeed;
     private float _currentJumpSpeed;
     private bool _isJumping;
-    private bool _startedFalling;
+    private bool _stoppedJumping;
 
     public bool IsGrounded { get; private set; }
     public bool IsGravityReversed { get; set; }
@@ -162,7 +162,7 @@ public class MovementController : MonoBehaviour
         {
             IsGrounded = false;
             _isJumping = true;
-            _startedFalling = false;
+            _stoppedJumping = false;
 
             if (IsGravityReversed)
                 _currentJumpSpeed = -_initialJumpForce;
@@ -196,15 +196,15 @@ public class MovementController : MonoBehaviour
         // check if the player is still in the air.
         if (!IsGrounded)
         {
-            // if the player just started falling down, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
-            if (!_startedFalling)
+            // if the player just started stopping the jump, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
+            if (!_stoppedJumping)
             {
                 float maxVelocity;
-                _startedFalling = true;
+                _stoppedJumping = true;
                 if (IsGravityReversed)
-                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_maxFallingSpeed, 0);
+                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_minJumpSpeed, 0);
                 else
-                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _maxFallingSpeed);
+                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpSpeed);
                 _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, maxVelocity);
             }
         }
