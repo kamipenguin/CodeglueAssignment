@@ -2,9 +2,6 @@
 
 public class MovementController : MonoBehaviour
 {
-    private Rigidbody _rigidBody;
-    private AnimationController _animationController;
-
     [Header("Walk Settings")]
     [SerializeField]
     private float _moveAcceleration = 1f;
@@ -25,6 +22,9 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     private float _minJumpSpeed = 2f;
 
+    private Rigidbody _rigidBody;
+    private AnimationController _animationController;
+
     // harcoded values to achieve desired rotation as mirror on the y-axis doesn't work.
     // I want that the players always face the camera.
     private float _rightRotationUp = 90f;
@@ -34,6 +34,7 @@ public class MovementController : MonoBehaviour
 
     private float _currentSpeed;
     private float _currentJumpSpeed;
+
     private bool _isJumping;
     private bool _stoppedJumping;
 

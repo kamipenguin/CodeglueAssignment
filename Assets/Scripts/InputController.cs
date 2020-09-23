@@ -2,8 +2,6 @@
 
 public class InputController : MonoBehaviour
 {
-    private MovementController _movementController;
-
     [SerializeField]
     private string _playerHorizontal;
     [SerializeField]
@@ -11,9 +9,12 @@ public class InputController : MonoBehaviour
 
     [SerializeField]
     private float _maxJumpButtonHoldTime = 0.25f;
+
     private float _jumpButtonHoldTimer = 0f;
 
     private float _storeHorizontal;
+
+    private MovementController _movementController;
 
     private void Awake()
     {

@@ -8,6 +8,9 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject _player2;
 
+    [SerializeField]
+    private float _respawnWaitTime = 0.5f;
+
     private MovementController _movementControllerPlayer1;
     private MovementController _movementControllerPlayer2;
 
@@ -19,8 +22,6 @@ public class GameController : MonoBehaviour
 
     private Quaternion _spawnRotationPlayer1;
     private Quaternion _spawnRotationPlayer2;
-
-    private float _waitTime = 0.5f;
 
     private void Start()
     {
@@ -54,7 +55,7 @@ public class GameController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Wait()
     {
-        yield return new WaitForSeconds(_waitTime);
+        yield return new WaitForSeconds(_respawnWaitTime);
         RespawnPlayers();
     }
 
@@ -76,6 +77,7 @@ public class GameController : MonoBehaviour
     {
         _movementControllerPlayer1.IsGravityReversed = false;
         _movementControllerPlayer2.IsGravityReversed = false;
+
         _movementControllerPlayer1.EnteredGravityPortal = false;
         _movementControllerPlayer2.EnteredGravityPortal = false;
 

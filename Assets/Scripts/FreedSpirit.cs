@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class FreedSpirit : MonoBehaviour
 {
-    private SphereCollider _sphereCollider;
-
     [SerializeField]
     private float _waitTime = 0.15f;
+
+    private SphereCollider _sphereCollider;
 
     private void Awake()
     {
@@ -19,7 +19,9 @@ public class FreedSpirit : MonoBehaviour
     }
 
     /// <summary>
+    /// This gameobject spawned immediatly after the player defeated an enemy.
     /// Wait a bit before setting the isTrigger to false so it won't be destroyed the moment the player defeated the enemy.
+    /// After setting the isTrigger to false, collision can be detected again.
     /// </summary>
     /// <returns></returns>
     private IEnumerator Wait()
