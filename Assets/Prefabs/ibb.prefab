@@ -679,7 +679,7 @@ MonoBehaviour:
   _initialJumpForce: 5
   _jumpDeceleration: 0.5
   _minJumpVelocity: 2
-  _gravityForce: 10
+  _gravityForce: 9.81
 --- !u!54 &378053992498438275
 Rigidbody:
   m_ObjectHideFlags: 0

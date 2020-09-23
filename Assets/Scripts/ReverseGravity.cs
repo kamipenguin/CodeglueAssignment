@@ -13,12 +13,14 @@ public class ReverseGravity : MonoBehaviour
             if (!playerMovementController.IsGravityReversed)
             {
                 playerMovementController.IsGravityReversed = true;
+                // use lerp here
                 Vector3 playerRotation = playerMovementController.gameObject.transform.eulerAngles;
                 playerMovementController.gameObject.transform.eulerAngles = new Vector3(_turnRotation, playerRotation.y, playerRotation.z);
             }
             else
             {
                 playerMovementController.IsGravityReversed = false;
+                // use lerp here
                 Vector3 playerRotation = playerMovementController.gameObject.transform.eulerAngles;
                 playerMovementController.gameObject.transform.eulerAngles = new Vector3(_turnRotation, playerRotation.y, playerRotation.z);
             }

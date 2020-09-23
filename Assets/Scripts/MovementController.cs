@@ -26,7 +26,7 @@ public class MovementController : MonoBehaviour
 
     [Header("Gravity Settings")]
     [SerializeField]
-    private float _gravityForce = 10f;
+    private float _gravityForce = 9.81f;
 
     private float _rightRotationUp = 90f;
     private float _leftRotationUp = 130f;
@@ -76,10 +76,12 @@ public class MovementController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Turns the player model to the correct direction when walking.
+    /// </summary>
     private void TurnPlayer()
     {
-
-        // turn the player in the correct direction
+        // player is walking right.
         if (_rigidBody.velocity.x > 0)
         {
             Vector3 currentRotation = _rigidBody.transform.eulerAngles;
@@ -88,6 +90,7 @@ public class MovementController : MonoBehaviour
             else
                 _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _rightRotationUp, currentRotation.z);
         }
+        // player is walking left
         else if (_rigidBody.velocity.x < 0)
         {
             Vector3 currentRotation = _rigidBody.transform.eulerAngles;
@@ -127,7 +130,12 @@ public class MovementController : MonoBehaviour
             IsGrounded = false;
             IsJumping = true;
             _stoppedJumping = false;
-            _currentJumpSpeed = _initialJumpForce;
+
+            if (IsGravityReversed)
+                _currentJumpSpeed = -_initialJumpForce;
+            else
+                _currentJumpSpeed = _initialJumpForce;
+
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
 
             _animationController.SetJumpingAnimation();
@@ -135,7 +143,11 @@ public class MovementController : MonoBehaviour
         // if the player is still jumping, decelerate the upwards velocity to slow the jump.
         else if (IsJumping)
         {
-            _currentJumpSpeed -= _jumpDeceleration * Time.deltaTime;
+            if (IsGravityReversed)
+                _currentJumpSpeed += _jumpDeceleration * Time.deltaTime;
+            else
+                _currentJumpSpeed -= _jumpDeceleration * Time.deltaTime;
+
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
         }
     }
@@ -151,8 +163,12 @@ public class MovementController : MonoBehaviour
             // the first time the player's jump is stopped, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
             if (!_stoppedJumping)
             {
+                float minVelocity;
                 _stoppedJumping = true;
-                float minVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpVelocity);
+                if (IsGravityReversed)
+                    minVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_minJumpVelocity, 0);
+                else
+                    minVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpVelocity);
                 _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, minVelocity);
             }
         }
