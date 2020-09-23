@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
     private Quaternion _spawnRotatoinPlayer2;
 
     private float _waitTime = 0.5f;
-    private float _turnRotation = 180;
 
     private void Start()
     {
