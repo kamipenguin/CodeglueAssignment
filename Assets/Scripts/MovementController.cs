@@ -223,7 +223,5 @@ public class MovementController : MonoBehaviour
             IsGrounded = true;
             EnteredGravityPortal = false;
         }
-        else
-            IsGrounded = false;   
     }
 }
