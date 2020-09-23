@@ -7,13 +7,25 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665384195432056015}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6a61f7d958c65f544b310e1f6af43e6d, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: e9485135f63f8824c8c80bd0268b54fb, type: 3}
+--- !u!114 &3243404436620505137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665384195432056015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272dc1d243706a24c914552ebad9f37e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1665384196610355845
 GameObject:
   m_ObjectHideFlags: 0
@@ -26,6 +38,7 @@ GameObject:
   - component: {fileID: 1665384196610355841}
   - component: {fileID: 1665384196610355840}
   - component: {fileID: 1665384196610355843}
+  - component: {fileID: 7322499846465109691}
   m_Layer: 0
   m_Name: Spirit
   m_TagString: Untagged
@@ -62,7 +75,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665384196610355845}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6a61f7d958c65f544b310e1f6af43e6d, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
@@ -109,6 +122,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7322499846465109691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665384196610355845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78623c2b6236e0649bc2431e2454521e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _crawler: {fileID: 1665384195432056015}
 --- !u!1 &1665384196792529933
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +183,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 124
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &669591890081350280
 MonoBehaviour:
@@ -174,7 +200,7 @@ MonoBehaviour:
   _wayPoints:
   - {fileID: 0}
   - {fileID: 0}
-  _moveSpeed: 0.1
+  _moveSpeed: 0.05
   _waitTime: 1
   _goalReachedDistance: 0.3
 --- !u!1001 &1665384195432022639
@@ -184,6 +210,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1665384196792529930}
     m_Modifications:
+    - target: {fileID: 100000, guid: e9485135f63f8824c8c80bd0268b54fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e9485135f63f8824c8c80bd0268b54fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

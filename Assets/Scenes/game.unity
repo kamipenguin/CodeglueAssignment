@@ -357,6 +357,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7322499846465109691, guid: 43c5cfb3acd24b04c84e63c70d2f878b,
+        type: 3}
+      propertyPath: _freedSpiritPrefab
+      value: 
+      objectReference: {fileID: 8896092123383804721, guid: 97c7b1e3c561446459727e295490d286,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43c5cfb3acd24b04c84e63c70d2f878b, type: 3}
 --- !u!1 &1415287006
