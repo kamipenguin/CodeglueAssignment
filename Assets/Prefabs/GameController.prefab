@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player1: {fileID: 0}
   _player2: {fileID: 0}
+  _respawnWaitTime: 0.5
