@@ -20,21 +20,34 @@ public class MovementController : MonoBehaviour
     private float _jumpDeceleration = 10f;
     [SerializeField]
     private float _minJumpVelocity = 20f;
-    [SerializeField]
-    private float _jumpFallDecelation = 2f;
 
     private float _currentJumpSpeed;
     private bool _stoppedJumping;
+
+    [Header("Gravity Settings")]
+    [SerializeField]
+    private float _gravityForce = 10f;
+    [SerializeField]
+    private float _maxFallingSpeed = 5f;
 
 
     public float CurrentSpeed { get; set; }
     public bool IsGrounded { get; set; }
     public bool IsJumping { get; set; }
+    public bool IsGravityReversed { get; set; }
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsGravityReversed)
+        {
+            _rigidBody.AddForce(Vector3.up * _gravityForce);
+        }
     }
 
     /// <summary>
@@ -150,10 +163,6 @@ public class MovementController : MonoBehaviour
                 _stoppedJumping = true;
                 float minVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpVelocity);
                 _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, minVelocity);
-            }
-            else
-            {
-                _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _rigidBody.velocity.y - _jumpFallDecelation);
             }
         }
 
