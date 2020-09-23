@@ -2,6 +2,8 @@
 
 public class ReverseGravity : MonoBehaviour
 {
+    private float _turnRotation = 180f;
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -11,14 +13,14 @@ public class ReverseGravity : MonoBehaviour
             if (!playerMovementController.IsGravityReversed)
             {
                 playerMovementController.IsGravityReversed = true;
-                playerRigidBody.useGravity = false;
-                // flip character
+                Vector3 playerRotation = playerMovementController.gameObject.transform.eulerAngles;
+                playerMovementController.gameObject.transform.eulerAngles = new Vector3(_turnRotation, playerRotation.y, playerRotation.z);
             }
             else
             {
                 playerMovementController.IsGravityReversed = false;
-                playerRigidBody.useGravity = true;
-                // flip character
+                Vector3 playerRotation = playerMovementController.gameObject.transform.eulerAngles;
+                playerMovementController.gameObject.transform.eulerAngles = new Vector3(_turnRotation, playerRotation.y, playerRotation.z);
             }
         }
     }

@@ -27,9 +27,12 @@ public class MovementController : MonoBehaviour
     [Header("Gravity Settings")]
     [SerializeField]
     private float _gravityForce = 10f;
-    [SerializeField]
-    private float _maxFallingSpeed = 5f;
 
+    private float _rightRotationUp = 90f;
+    private float _leftRotationUp = 130f;
+
+    private float _rightRotationDown = 130f;
+    private float _leftRotationDown = 30f;
 
     public float CurrentSpeed { get; set; }
     public bool IsGrounded { get; set; }
@@ -45,7 +48,11 @@ public class MovementController : MonoBehaviour
     private void FixedUpdate()
     {
         if (IsGravityReversed)
+        {
             _rigidBody.AddForce(Vector3.up * _gravityForce);
+        }
+        else
+            _rigidBody.AddForce(Vector3.down * _gravityForce);
     }
 
     /// <summary>
@@ -63,7 +70,32 @@ public class MovementController : MonoBehaviour
         _rigidBody.velocity = new Vector2(horizontal * CurrentSpeed, _rigidBody.velocity.y);
 
         if (IsGrounded)
+        {
             _animationController.SetWalkingAnimation();
+            TurnPlayer();
+        }
+    }
+
+    private void TurnPlayer()
+    {
+
+        // turn the player in the correct direction
+        if (_rigidBody.velocity.x > 0)
+        {
+            Vector3 currentRotation = _rigidBody.transform.eulerAngles;
+            if (IsGravityReversed)
+                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _rightRotationDown, currentRotation.z);
+            else
+                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _rightRotationUp, currentRotation.z);
+        }
+        else if (_rigidBody.velocity.x < 0)
+        {
+            Vector3 currentRotation = _rigidBody.transform.eulerAngles;
+            if (IsGravityReversed)
+                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _leftRotationDown, currentRotation.z);
+            else
+                _rigidBody.transform.eulerAngles = new Vector3(currentRotation.x, _leftRotationUp, currentRotation.z);
+        }
     }
 
     /// <summary>
@@ -79,7 +111,7 @@ public class MovementController : MonoBehaviour
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
             _rigidBody.velocity = new Vector2(lastHorizontal * CurrentSpeed, _rigidBody.velocity.y);
         }
-        else
+        else if (IsGrounded)
             _animationController.SetIdleAnimation();
     }
 
@@ -89,8 +121,6 @@ public class MovementController : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        CheckIsGrounded();
-
         // if the player is on the ground, set the upwards velocity high so the player launches in the air.
         if (IsGrounded)
         {
@@ -100,7 +130,7 @@ public class MovementController : MonoBehaviour
             _currentJumpSpeed = _initialJumpForce;
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
 
-            //_animationController.SetJumpingAnimation();
+            _animationController.SetJumpingAnimation();
         }
         // if the player is still jumping, decelerate the upwards velocity to slow the jump.
         else if (IsJumping)
@@ -115,8 +145,6 @@ public class MovementController : MonoBehaviour
     /// </summary>
     public void StopJumping()
     {
-        CheckIsGrounded();
-
         // check if the player is still in the air.
         if (!IsGrounded)
         {
@@ -136,8 +164,8 @@ public class MovementController : MonoBehaviour
     /// Checks if the player is on the ground or on a player.
     /// </summary>
     /// <returns></returns>
-    private void CheckIsGrounded()
+    private void OnCollisionEnter(Collision collision)
     {
-        IsGrounded = _rigidBody.velocity.y == 0;
+        IsGrounded = collision.gameObject.CompareTag("Ground");
     }
 }
