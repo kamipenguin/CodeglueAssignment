@@ -55,10 +55,10 @@ public class InputController : MonoBehaviour
             if (_jumpButtonHoldTimer < _maxJumpButtonHoldTime)
                 _movementController.Jump();
             else
-                _movementController.StopJumping();
+                _movementController.HandleFall();
         }
         else
-            _movementController.StopJumping();
+            _movementController.HandleFall();
 
         // resets jump timer when the player is grounded.
         if (_movementController.IsGrounded)

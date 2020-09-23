@@ -18,6 +18,14 @@ public class WayPointAgent : MonoBehaviour
 
     private void Update()
     {
+        MoveToDestination();
+    }
+
+    /// <summary>
+    /// Moves the enemy to destination if they hasn't reached it yet.
+    /// </summary>
+    private void MoveToDestination()
+    {
         if (!_hasReachedDestination)
         {
             Vector3 currentPosition = gameObject.transform.position;
@@ -28,6 +36,12 @@ public class WayPointAgent : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Checks if the enemy has reached their destination.
+    /// </summary>
+    /// <param name="currentPos"></param>
+    /// <param name="goalPos"></param>
     private void CheckDestinationReached(Vector3 currentPos, Vector3 goalPos)
     {
         if (Vector3.Distance(currentPos, goalPos) <= _goalReachedDistance)
@@ -37,6 +51,11 @@ public class WayPointAgent : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Wait for a few seconds before turning around and sets new destination.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator WaitAndTurn()
     {
         yield return new WaitForSeconds(_waitTime);

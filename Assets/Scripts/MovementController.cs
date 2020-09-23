@@ -15,29 +15,30 @@ public class MovementController : MonoBehaviour
 
     [Header("Jump Settings")]
     [SerializeField]
-    private float _initialJumpForce = 100f;
+    private float _initialJumpForce = 5f;
     [SerializeField]
-    private float _jumpDeceleration = 10f;
-    [SerializeField]
-    private float _minJumpVelocity = 20f;
-
-    private float _currentJumpSpeed;
-    private bool _stoppedJumping;
+    private float _jumpDeceleration = 0.5f;
 
     [Header("Gravity Settings")]
     [SerializeField]
     private float _gravityForce = 9.81f;
+    [SerializeField]
+    private float _maxFallingSpeed = 2f;
 
     private float _rightRotationUp = 90f;
     private float _leftRotationUp = 130f;
-
     private float _rightRotationDown = 130f;
     private float _leftRotationDown = 30f;
 
-    public float CurrentSpeed { get; set; }
-    public bool IsGrounded { get; set; }
-    public bool IsJumping { get; set; }
+    private float _currentSpeed;
+    private float _currentJumpSpeed;
+    private bool _isJumping;
+    private bool _startedFalling;
+
+    public bool IsGrounded { get; private set; }
     public bool IsGravityReversed { get; set; }
+    public bool EnteredGravityPortal { get; set; }
+    public float StoredMaxFallingSpeed { get; set; }
 
     private void Awake()
     {
@@ -47,12 +48,41 @@ public class MovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        HandleGravity();
+    }
+
+    /// <summary>
+    /// Handles the gravity.
+    /// </summary>
+    private void HandleGravity()
+    {
+        // check in which direction gravity should be applied.
         if (IsGravityReversed)
-        {
             _rigidBody.AddForce(Vector3.up * _gravityForce);
-        }
         else
             _rigidBody.AddForce(Vector3.down * _gravityForce);
+
+        // restrict falling velocity when going through the gravity portal.
+        if (EnteredGravityPortal)
+            LimitFallingSpeed();
+    }
+
+    /// <summary>
+    /// Limit falling speed between boundaries.
+    /// </summary>
+    private void LimitFallingSpeed()
+    {
+        float yVelocity = _rigidBody.velocity.y;
+        if (IsGravityReversed)
+        {
+            float limitedFallingSpeed = Mathf.Clamp(yVelocity, StoredMaxFallingSpeed, -StoredMaxFallingSpeed);
+            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, limitedFallingSpeed);
+        }
+        else
+        {
+            float limitedFallingSpeed = Mathf.Clamp(yVelocity, -StoredMaxFallingSpeed, StoredMaxFallingSpeed);
+            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, limitedFallingSpeed);
+        }
     }
 
     /// <summary>
@@ -63,11 +93,11 @@ public class MovementController : MonoBehaviour
     {
         // when player changes direction, set speed to 0.
         if ((_rigidBody.velocity.x > 0 && horizontal < 0) || (_rigidBody.velocity.x < 0 && horizontal > 0))
-            CurrentSpeed = 0;
+            _currentSpeed = 0;
         // accelerate the player's velocity to max speed.
-        CurrentSpeed += _moveAcceleration * Time.deltaTime;
-        CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
-        _rigidBody.velocity = new Vector2(horizontal * CurrentSpeed, _rigidBody.velocity.y);
+        _currentSpeed += _moveAcceleration * Time.deltaTime;
+        _currentSpeed = Mathf.Clamp(_currentSpeed, 0, _maxMoveSpeed);
+        _rigidBody.velocity = new Vector3(horizontal * _currentSpeed, _rigidBody.velocity.y);
 
         if (IsGrounded)
         {
@@ -81,6 +111,9 @@ public class MovementController : MonoBehaviour
     /// </summary>
     private void TurnPlayer()
     {
+        if (EnteredGravityPortal)
+            return;
+
         // player is walking right.
         if (_rigidBody.velocity.x > 0)
         {
@@ -108,11 +141,11 @@ public class MovementController : MonoBehaviour
     public void StopMoving(float lastHorizontal)
     {
         // decelerate the player's velocity to 0, so the player stops moving.
-        if (CurrentSpeed != 0)
+        if (_currentSpeed != 0)
         {
-            CurrentSpeed -= _moveDeceleration * Time.deltaTime;
-            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, _maxMoveSpeed);
-            _rigidBody.velocity = new Vector2(lastHorizontal * CurrentSpeed, _rigidBody.velocity.y);
+            _currentSpeed -= _moveDeceleration * Time.deltaTime;
+            _currentSpeed = Mathf.Clamp(_currentSpeed, 0, _maxMoveSpeed);
+            _rigidBody.velocity = new Vector3(lastHorizontal * _currentSpeed, _rigidBody.velocity.y);
         }
         else if (IsGrounded)
             _animationController.SetIdleAnimation();
@@ -128,52 +161,55 @@ public class MovementController : MonoBehaviour
         if (IsGrounded)
         {
             IsGrounded = false;
-            IsJumping = true;
-            _stoppedJumping = false;
+            _isJumping = true;
+            _startedFalling = false;
 
             if (IsGravityReversed)
                 _currentJumpSpeed = -_initialJumpForce;
             else
                 _currentJumpSpeed = _initialJumpForce;
 
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
+            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, _currentJumpSpeed);
 
             _animationController.SetJumpingAnimation();
         }
         // if the player is still jumping, decelerate the upwards velocity to slow the jump.
-        else if (IsJumping)
+        else if (_isJumping)
         {
             if (IsGravityReversed)
                 _currentJumpSpeed += _jumpDeceleration * Time.deltaTime;
             else
                 _currentJumpSpeed -= _jumpDeceleration * Time.deltaTime;
 
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _currentJumpSpeed);
+            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, _currentJumpSpeed);
         }
     }
 
     /// <summary>
-    /// Handles the stopping of the jump of the player.
+    /// Handles the falling down of the player.
     /// </summary>
-    public void StopJumping()
+    public void HandleFall()
     {
+        if (EnteredGravityPortal)
+            return;
+
         // check if the player is still in the air.
         if (!IsGrounded)
         {
-            // the first time the player's jump is stopped, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
-            if (!_stoppedJumping)
+            // if the player just started falling down, set the jump velocity to a small value so the player's upwards velocity decelerates fast.
+            if (!_startedFalling)
             {
-                float minVelocity;
-                _stoppedJumping = true;
+                float maxVelocity;
+                _startedFalling = true;
                 if (IsGravityReversed)
-                    minVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_minJumpVelocity, 0);
+                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, -_maxFallingSpeed, 0);
                 else
-                    minVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _minJumpVelocity);
-                _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, minVelocity);
+                    maxVelocity = Mathf.Clamp(_rigidBody.velocity.y, 0, _maxFallingSpeed);
+                _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, maxVelocity);
             }
         }
 
-        IsJumping = false;
+        _isJumping = false;
     }
 
     /// <summary>
@@ -182,6 +218,12 @@ public class MovementController : MonoBehaviour
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)
     {
-        IsGrounded = collision.gameObject.CompareTag("Ground");
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            IsGrounded = true;
+            EnteredGravityPortal = false;
+        }
+        else
+            IsGrounded = false;   
     }
 }
