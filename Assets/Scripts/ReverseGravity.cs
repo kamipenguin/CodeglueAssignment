@@ -19,9 +19,14 @@ public class ReverseGravity : MonoBehaviour
             playerRigidBody.DORotate(new Vector3(playerRotation.x + _turnRotation, playerRotation.y, playerRotation.z), _turnSpeed);
 
             playerMovementController.IsGravityReversed = !playerMovementController.IsGravityReversed;
-            playerMovementController.EnteredGravityPortal = true;
 
-            playerMovementController.StoredMaxFallingSpeed = playerRigidBody.velocity.y;
+            // store the falling speed the first time the player go through the portal so we can restrict the falling speed.
+            if (!playerMovementController.EnteredGravityPortal)
+                playerMovementController.StoredMaxFallingSpeed = playerRigidBody.velocity.y;
+            else
+                playerMovementController.StoredMaxFallingSpeed = -playerMovementController.StoredMaxFallingSpeed;
+
+            playerMovementController.EnteredGravityPortal = true;
         }
     }
 }
